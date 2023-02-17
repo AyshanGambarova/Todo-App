@@ -65,18 +65,6 @@
     </div>
   </div>
   <div>
-    <!-- <ul v-for="(todo, index) in todos" :key="index">
-      <li>
-        {{ todo.subject }} <span v-for="(tag, index) in todo.tags" :key="index">{{tag}}</span> <button @click="removeTodo(index)">Delete</button>
-        <button @click="editTodo(index,todo)">Edit</button
-        ><input
-          type="checkbox"
-          v-model="todo.completed"
-          @change="changeStatus(todo)"
-        />
-      </li>
-    </ul> -->
-
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead
@@ -103,14 +91,15 @@
             </th>
             <td class="px-6 py-4">
               <div v-if="todo.tags.length">
-              <span v-for="(tag, index) in todo.tags" :key="index">{{
-                tag
-              }}</span>
+                <span v-for="(tag, index) in todo.tags" :key="index">{{
+                  (index ? ", " : "") + tag
+                }}</span>
               </div>
               <div v-else>There isn't any tag</div>
             </td>
             <td class="px-6 py-4">
               <input
+                class="accent-indigo-600"
                 type="checkbox"
                 v-model="todo.completed"
                 @change="changeStatus(todo)"
@@ -118,13 +107,15 @@
             </td>
             <td class="px-6 py-4 text-left">
               <span
-              @click="editTodo(index,todo)"
+                @click="editTodo(index, todo)"
                 class="font-medium text-indigo-600 dark:text-indigo-500 hover:underline cursor-pointer"
-                >Edit</span>
-                <span
+                >Edit</span
+              >
+              <span
                 @click="removeTodo(index)"
                 class="font-medium ml-2 text-indigo-600 dark:text-indigo-500 hover:underline cursor-pointer"
-                >Delete</span>
+                >Delete</span
+              >
             </td>
           </tr>
         </tbody>
