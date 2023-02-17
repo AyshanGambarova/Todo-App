@@ -13,13 +13,14 @@ export default defineComponent({
     });
     const todos = ref<any>([]);
     const editedItemIndex = ref<any>(null);
+    const showAddAlert = ref<boolean>(false);
+    const showEditAlert = ref<boolean>(false);
 
     if (localStorage.getItem("todos") == null) {
       localStorage.setItem("todos", JSON.stringify([]));
     } else {
       todos.value = JSON.parse(localStorage.getItem("todos") as string);
     }
-    const showAlert = ref<boolean>(false);
     //#endregion
 
     //#region Form validation
@@ -57,55 +58,37 @@ export default defineComponent({
         removeTag(creatingTodo.value.tags.length - 1);
       }
     };
-    // async function addTodo() {
-    //   validate.value.$dirty = true;
-    //   if (!validate.value.$error) {
-    //     try {
-    //       if (editedItemIndex !== null) {
-    //         await todos.value.splice(
-    //           editedItemIndex.value,
-    //           1,
-    //           creatingTodo.value
-    //         );
-    //         editedItemIndex.value = null;
-    //       } else {
-    //         await todos.value.push(creatingTodo.value);
-    //         showAlert.value = true;
-    //         setTimeout(function () {
-    //           showAlert.value = false;
-    //         }, 2000);
-    //       }
-    //       localStorage.setItem("tasks", JSON.stringify(todos));
-    //     } catch (error) {
-    //       creatingTodo.value = {
-    //         subject: "",
-    //         tags: [],
-    //         completed: false,
-    //       };
-    //     }
-    //   }
-    // }
-     function addTodo() {
+    async function addTodo() {
       validate.value.$dirty = true;
       if (!validate.value.$error) {
-        if (editedItemIndex !== null) {
-          todos.value.splice(editedItemIndex.value, 1, creatingTodo.value);
-          console.log("edit");
-          editedItemIndex.value = null;
-        } else {
-          todos.value.push(creatingTodo.value);
-          console.log("add");
-          showAlert.value = true;
-          setTimeout(function () {
-            showAlert.value = false;
-          }, 2000);
+        try {
+          if (editedItemIndex.value !== null) {
+            await todos.value.splice(
+              editedItemIndex.value,
+              1,
+              creatingTodo.value
+            );
+            showEditAlert.value = true;
+            setTimeout(function () {
+              showEditAlert.value = false;
+            }, 2000);
+            editedItemIndex.value = null;
+          } else {
+            await todos.value.push(creatingTodo.value);
+            showAddAlert.value = true;
+            setTimeout(function () {
+              showAddAlert.value = false;
+            }, 2000);
+          }
+          localStorage.setItem("tasks", JSON.stringify(todos));
+          creatingTodo.value = {
+            subject: "",
+            tags: [],
+            completed: false,
+          };
+        } catch (error) {
+          console.log(error);
         }
-        localStorage.setItem("tasks", JSON.stringify(todos));
-        creatingTodo.value = {
-          subject: "",
-          tags: [],
-          completed: false,
-        };
       }
     }
     const removeTodo = (index: number) => {
@@ -151,10 +134,12 @@ export default defineComponent({
       validate,
       handleBlur,
       todos,
-      showAlert,
+      showAddAlert,
+      showEditAlert,
       removeTodo,
       editTodo,
       changeStatus,
+      editedItemIndex
     };
   },
 });
