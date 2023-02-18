@@ -110,7 +110,7 @@
           v-model="creatingTodo.subject"
           type="text"
           id="default-input"
-          class="focus:ring-0 relative block outline-none border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+          class="focus:ring-0 pl-5 relative block outline-none border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
           placeholder="Add a subject"
           required
           @blur="handleBlur('subject')"
@@ -120,7 +120,7 @@
         <p
           v-for="$error in validate.subject.$errors"
           :key="$error.$property"
-          class="text-letf mt-1 pl-1 text-xs text-red-600 tracking-wide"
+          class="text-center mt-1 pl-1 text-xs text-red-600 tracking-wide"
         >
           {{ $error.$message }}
         </p>

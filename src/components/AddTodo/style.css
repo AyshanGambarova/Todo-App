@@ -13,14 +13,13 @@
   height: 24px;
   color: white;
   float: left;
-  font-size: 14px;
+  font-size: 13px;
   margin-right: 10px;
   background-color: #667eea;
   border-radius: 15px;
   margin-top: 10px;
-  line-height: 24px;
+  line-height: 22px;
   padding: 0 8px;
-  font-family: "Roboto";
 }
 
 .tag-input__tag > span {
@@ -33,7 +32,7 @@
 .tag-input__text {
   border: none;
   outline: none;
-  font-size: 1em;
+  font-size: 14px !important;
   line-height: 40px;
   background: none;
 }
