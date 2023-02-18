@@ -112,7 +112,7 @@
           id="default-input"
           class="focus:ring-0 pl-5 relative block outline-none border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
           placeholder="Add a subject"
-          required
+          autocomplete="off"
           @blur="handleBlur('subject')"
         />
       </div>
@@ -146,7 +146,6 @@
       </div>
     </div>
     <div class="ml-4">
-      [validate.$invalid:{{ validate.$invalid }}]
       <button
         @click="addTodo"
         :disabled="validate.$invalid"

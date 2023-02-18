@@ -28,6 +28,7 @@ export default defineComponent({
       completed: false,
     });
     const todos = ref<any>([]);
+
     const editedItemIndex = ref<any>(null);
     const deletedItemIndex = ref<any>(null);
     const showAddAlert = ref<boolean>(false);
@@ -40,6 +41,17 @@ export default defineComponent({
     } else {
       todos.value = JSON.parse(localStorage.getItem("todos") as string);
     }
+    let allTags = todos.value
+      .map((todo: any) => todo.tags)
+      .filter((item: any) => {
+        return Object.keys(item).length > 0;
+      });
+    let flattenedTags = allTags.reduce(
+      (acc: any, curr: any) => acc.concat(curr),
+      []
+    );
+    let uniqueTags: any = Array.from(new Set(flattenedTags));
+    localStorage.setItem("allTags", JSON.stringify(uniqueTags));
     //#endregion
 
     //#region Form validation
@@ -140,7 +152,6 @@ export default defineComponent({
     //#region Hooks
     onMounted(() => {
       todos.value = JSON.parse(localStorage.getItem("todos") as string) || [];
-      console.log("onMounted");
       // validate.value.$invalid=true
     });
     watch(
