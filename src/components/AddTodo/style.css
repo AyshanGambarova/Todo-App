@@ -1,39 +1,43 @@
 .tag-input {
-    width: 100%;
-    border: 1px solid #d0d2d4;
-    background: #fff;
-    border-radius: 2px;
-    font-size: 0.9em;
-    box-sizing: border-box;
-    padding: 0 10px;
-    margin-bottom: 10px;
-  }
+  width: 100%;
+  border: 1px solid #d0d2d4;
+  background: #fff;
+  border-radius: 2px;
+  font-size: 0.9em;
+  box-sizing: border-box;
+  padding: 0 10px;
+  margin-bottom: 10px;
+}
 
-  .tag-input__tag {
-    height: 24px;
-    color: white;
-    float: left;
-    font-size: 14px;
-    margin-right: 10px;
-    background-color: #667EEA;
-    border-radius: 15px;
-    margin-top: 10px;
-    line-height: 24px;
-    padding: 0 8px;
-    font-family: "Roboto";
-  }
+.tag-input__tag {
+  height: 24px;
+  color: white;
+  float: left;
+  font-size: 14px;
+  margin-right: 10px;
+  background-color: #667eea;
+  border-radius: 15px;
+  margin-top: 10px;
+  line-height: 24px;
+  padding: 0 8px;
+  font-family: "Roboto";
+}
 
-  .tag-input__tag > span {
-    cursor: pointer;
-    opacity: 0.75;
-    display: inline-block;
-    margin-left: 8px;
-  }
+.tag-input__tag > span {
+  cursor: pointer;
+  opacity: 0.75;
+  display: inline-block;
+  margin-left: 8px;
+}
 
-  .tag-input__text {
-    border: none;
-    outline: none;
-    font-size: 1em;
+.tag-input__text {
+  border: none;
+  outline: none;
+  font-size: 1em;
   line-height: 40px;
   background: none;
-  }
+}
+
+.tag-input:has(> input:focus) {
+  border: 1px solid #1c64f2;
+}

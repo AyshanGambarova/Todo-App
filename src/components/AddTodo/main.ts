@@ -1,9 +1,25 @@
 import type { TTodo } from "@/types/Todo";
 import { defineComponent, onMounted, ref, watch } from "vue";
 import { useVuelidate } from "@vuelidate/core";
-import { minLength, required } from "@vuelidate/validators";
+import { required } from "@vuelidate/validators";
+import {
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+  TransitionChild,
+  TransitionRoot,
+} from "@headlessui/vue";
+import { ExclamationTriangleIcon } from "@heroicons/vue/24/outline";
 export default defineComponent({
   name: "AddTodo",
+  components: {
+    Dialog,
+    DialogPanel,
+    DialogTitle,
+    TransitionChild,
+    TransitionRoot,
+    ExclamationTriangleIcon,
+  },
   setup() {
     //#region States
     let creatingTodo = ref<TTodo>({
@@ -13,8 +29,11 @@ export default defineComponent({
     });
     const todos = ref<any>([]);
     const editedItemIndex = ref<any>(null);
+    const deletedItemIndex = ref<any>(null);
     const showAddAlert = ref<boolean>(false);
     const showEditAlert = ref<boolean>(false);
+    const showDeleteAlert = ref<boolean>(false);
+    const open = ref<boolean>(false);
 
     if (localStorage.getItem("todos") == null) {
       localStorage.setItem("todos", JSON.stringify([]));
@@ -90,17 +109,25 @@ export default defineComponent({
           console.log(error);
         }
       }
+      //  validate.value.$invalid=true;
     }
+    const removingTodo = (index: number) => {
+      deletedItemIndex.value = index;
+      open.value = true;
+    };
     const removeTodo = (index: number) => {
+      open.value = false;
       todos.value.splice(index, 1);
       localStorage.setItem("todos", JSON.stringify(todos));
+      showDeleteAlert.value = true;
+      setTimeout(function () {
+        showDeleteAlert.value = false;
+      }, 2000);
     };
     const editTodo = (index: number, editedTodo: TTodo) => {
       creatingTodo.value.subject = editedTodo.subject;
       creatingTodo.value.tags = editedTodo.tags.map((tag) => tag);
       editedItemIndex.value = index;
-      console.log("edited index click edit", editedItemIndex.value);
-
       localStorage.setItem("tasks", JSON.stringify(todos));
     };
     const changeStatus = (todoItem: TTodo) => {
@@ -113,7 +140,8 @@ export default defineComponent({
     //#region Hooks
     onMounted(() => {
       todos.value = JSON.parse(localStorage.getItem("todos") as string) || [];
-      console.log("edited index on mounted", editedItemIndex.value);
+      console.log("onMounted");
+      // validate.value.$invalid=true
     });
     watch(
       todos,
@@ -136,10 +164,13 @@ export default defineComponent({
       todos,
       showAddAlert,
       showEditAlert,
+      showDeleteAlert,
       removeTodo,
+      removingTodo,
       editTodo,
       changeStatus,
-      editedItemIndex
+      editedItemIndex,
+      open,
     };
   },
 });
