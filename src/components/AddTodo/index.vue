@@ -142,7 +142,15 @@
           class="tag-input__text focus:ring-0"
           @keydown.enter="addTag"
           @keydown.delete="removeLastTag"
+          v-model="searchingTag"
         />
+      </div>
+      <div v-if="searchTags.length" class="overflow-y-auto h-20 shadow-lg p-5">
+        <ul class="divide-y divide-slate-200">
+          <li v-for="tag in searchTags" :key="tag" @click="selectSearchingTag(tag)" class="cursor-pointer">
+            {{ tag }}
+          </li>
+        </ul>
       </div>
     </div>
     <div class="ml-4">

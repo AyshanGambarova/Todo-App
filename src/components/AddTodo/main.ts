@@ -1,5 +1,5 @@
 import type { TTodo } from "@/types/Todo";
-import { defineComponent, onMounted, ref, watch } from "vue";
+import { computed, defineComponent, onMounted, ref, watch } from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required } from "@vuelidate/validators";
 import {
@@ -28,7 +28,9 @@ export default defineComponent({
       completed: false,
     });
     const todos = ref<any>([]);
-
+    const allTags = ref<any>([]);
+    const searchingTag = ref<string>("");
+    const selectedTag = ref<string>("");
     const editedItemIndex = ref<any>(null);
     const deletedItemIndex = ref<any>(null);
     const showAddAlert = ref<boolean>(false);
@@ -41,17 +43,26 @@ export default defineComponent({
     } else {
       todos.value = JSON.parse(localStorage.getItem("todos") as string);
     }
-    let allTags = todos.value
+
+    let tags = todos.value
       .map((todo: any) => todo.tags)
       .filter((item: any) => {
         return Object.keys(item).length > 0;
       });
-    let flattenedTags = allTags.reduce(
+    let flattenedTags = tags.reduce(
       (acc: any, curr: any) => acc.concat(curr),
       []
     );
     let uniqueTags: any = Array.from(new Set(flattenedTags));
     localStorage.setItem("allTags", JSON.stringify(uniqueTags));
+    allTags.value = JSON.parse(localStorage.getItem("allTags") as string);
+    console.log(allTags);
+    // if (localStorage.getItem("allTags") == null) {
+    //   localStorage.setItem("allTags", JSON.stringify([]));
+    // } else {
+    //   allTags.value = JSON.parse(localStorage.getItem("allTags") as string);
+    // }
+
     //#endregion
 
     //#region Form validation
@@ -131,6 +142,7 @@ export default defineComponent({
       open.value = false;
       todos.value.splice(index, 1);
       localStorage.setItem("todos", JSON.stringify(todos));
+      localStorage.setItem("allTags", JSON.stringify(allTags));
       showDeleteAlert.value = true;
       setTimeout(function () {
         showDeleteAlert.value = false;
@@ -146,12 +158,40 @@ export default defineComponent({
       creatingTodo.value.completed = todoItem.completed;
       localStorage.setItem("tasks", JSON.stringify(todos));
     };
-
+    const selectSearchingTag = (tag: any) => {
+      selectedTag.value = tag;
+      if (creatingTodo.value.tags.length >= 1) {
+        for (let i = 0; i < creatingTodo.value.tags.length; i++) {
+          if (creatingTodo.value.tags[i] === selectedTag.value) {
+            return false;
+          }
+        }
+      }
+      creatingTodo.value.tags.push(selectedTag.value);
+      searchingTag.value = "";
+    };
+    const searchTags = computed(() => {
+      if (searchingTag.value === "") {
+        return [];
+      }
+      let matches = 0;
+      return allTags.value.filter((tag: any) => {
+        if (
+          tag.toLowerCase().startsWith(searchingTag.value.toLowerCase()) &&
+          matches < 10
+        ) {
+          matches++;
+          return tag;
+        }
+      });
+    });
     //#endregion
 
     //#region Hooks
     onMounted(() => {
       todos.value = JSON.parse(localStorage.getItem("todos") as string) || [];
+      allTags.value =
+        JSON.parse(localStorage.getItem("allTags") as string) || [];
       // validate.value.$invalid=true
     });
     watch(
@@ -182,6 +222,10 @@ export default defineComponent({
       changeStatus,
       editedItemIndex,
       open,
+      searchingTag,
+      searchTags,
+      allTags,
+      selectSearchingTag,
     };
   },
 });
