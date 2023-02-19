@@ -31,6 +31,8 @@ export default defineComponent({
     const allTags = ref<any>([]);
     const searchingTag = ref<string>("");
     const selectedTag = ref<string>("");
+    const filteredTag = ref<string>("");
+    const autoSelectedTag = ref<string>("");
     const editedItemIndex = ref<any>(null);
     const deletedItemIndex = ref<any>(null);
     const showAddAlert = ref<boolean>(false);
@@ -56,13 +58,6 @@ export default defineComponent({
     let uniqueTags: any = Array.from(new Set(flattenedTags));
     localStorage.setItem("allTags", JSON.stringify(uniqueTags));
     allTags.value = JSON.parse(localStorage.getItem("allTags") as string);
-    console.log(allTags);
-    // if (localStorage.getItem("allTags") == null) {
-    //   localStorage.setItem("allTags", JSON.stringify([]));
-    // } else {
-    //   allTags.value = JSON.parse(localStorage.getItem("allTags") as string);
-    // }
-
     //#endregion
 
     //#region Form validation
@@ -91,7 +86,6 @@ export default defineComponent({
         event.target.value = "";
       }
     };
-
     const removeTag = (index: number) => {
       creatingTodo.value.tags.splice(index, 1);
     };
@@ -170,6 +164,15 @@ export default defineComponent({
       creatingTodo.value.tags.push(selectedTag.value);
       searchingTag.value = "";
     };
+    const triggerFilteredData = (filteringTag: any) => {
+      console.log(filteringTag);
+      todos.value.filter((obj: any) => {
+        return obj.tags.some((tag: any) => {
+          return tag.includes(filteringTag);
+        });
+      });
+    };
+
     const searchTags = computed(() => {
       if (searchingTag.value === "") {
         return [];
@@ -185,6 +188,7 @@ export default defineComponent({
         }
       });
     });
+
     //#endregion
 
     //#region Hooks
@@ -201,6 +205,9 @@ export default defineComponent({
       },
       { deep: true }
     );
+    watch(filteredTag, () => {
+      triggerFilteredData(filteredTag.value);
+    });
 
     //#endregion
 
@@ -226,6 +233,8 @@ export default defineComponent({
       searchTags,
       allTags,
       selectSearchingTag,
+      filteredTag,
+      autoSelectedTag,
     };
   },
 });

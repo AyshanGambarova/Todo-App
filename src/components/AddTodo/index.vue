@@ -147,7 +147,12 @@
       </div>
       <div v-if="searchTags.length" class="overflow-y-auto h-20 shadow-lg p-5">
         <ul class="divide-y divide-slate-200">
-          <li v-for="tag in searchTags" :key="tag" @click="selectSearchingTag(tag)" class="cursor-pointer">
+          <li
+            v-for="tag in searchTags"
+            :key="tag"
+            @click="selectSearchingTag(tag)"
+            class="cursor-pointer"
+          >
             {{ tag }}
           </li>
         </ul>
@@ -180,7 +185,21 @@
       >
         <tr>
           <th scope="col" class="px-6 py-3">Subject</th>
-          <th scope="col" class="px-6 py-3">Tags</th>
+          <th scope="col" class="px-6 py-3">
+            Tags
+            <select
+              v-model="filteredTag"
+              id="countries"
+              class="focus:ring-0 pl-5 relative block outline-none border border-gray-300 text-gray-900 text-sm rounded-sm block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+            >
+              <option selected disabled hidden :value="autoSelectedTag">
+                Choose a Tag
+              </option>
+              <option v-for="tag in allTags" :value="tag" :key="tag">
+                {{ tag }}
+              </option>
+            </select>
+          </th>
           <th scope="col" class="px-6 py-3">Status</th>
           <th scope="col" class="px-6 py-3">Actions</th>
         </tr>
