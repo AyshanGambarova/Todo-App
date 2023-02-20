@@ -195,7 +195,7 @@
               <option selected disabled hidden :value="autoSelectedTag">
                 Choose a Tag
               </option>
-               <option @click="getAllTodos">
+               <option @click="getAllTodos" selected v-if="filteredTodos.length">
                 All Todos
               </option>
               <option v-for="tag in allTags" :value="tag" :key="tag">
