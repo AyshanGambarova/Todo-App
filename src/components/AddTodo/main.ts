@@ -29,6 +29,7 @@ export default defineComponent({
     });
     const todos = ref<any>([]);
     const allTags = ref<any>([]);
+    const filteredTodos = ref<any>([]);
     const searchingTag = ref<string>("");
     const selectedTag = ref<string>("");
     const filteredTag = ref<string>("");
@@ -59,6 +60,9 @@ export default defineComponent({
     //#endregion
 
     //#region Methods
+    const getAllTodos = () => {
+      todos.value = JSON.parse(localStorage.getItem("todos") as string);
+    };
     const addTag = (event: any) => {
       event.preventDefault();
       let val = event.target.value.trim();
@@ -164,15 +168,16 @@ export default defineComponent({
       creatingTodo.value.tags.push(selectedTag.value);
       searchingTag.value = "";
     };
+
     const triggerFilteredData = (filteringTag: any) => {
-      console.log(filteringTag);
-      let filteredTodos = todos.value.filter((obj: any) => {
+      console.log("filteringTag", filteringTag);
+      filteredTodos.value = todos.value.filter((obj: any) => {
         return obj.tags.some((tag: any) => {
           return tag.includes(filteringTag);
         });
       });
-      todos.value = [...filteredTodos];
-      console.log(todos);
+
+      console.log("filteredTodos", filteredTodos);
     };
 
     const searchTags = computed(() => {
@@ -198,6 +203,7 @@ export default defineComponent({
       todos.value = JSON.parse(localStorage.getItem("todos") as string) || [];
       allTags.value =
         JSON.parse(localStorage.getItem("allTags") as string) || [];
+      console.log(filteredTag.value);
       // validate.value.$invalid=true
     });
     watch(
@@ -237,6 +243,8 @@ export default defineComponent({
       selectSearchingTag,
       filteredTag,
       autoSelectedTag,
+      getAllTodos,
+      filteredTodos,
     };
   },
 });
