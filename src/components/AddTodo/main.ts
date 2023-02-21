@@ -139,9 +139,9 @@ export default defineComponent({
       deletedItemIndex.value = index;
       open.value = true;
     };
-    const removeTodo = (index: number) => {
+    const removeTodo = () => {
       open.value = false;
-      todos.value.splice(index, 1);
+      todos.value.splice(deletedItemIndex.value , 1);
       localStorage.setItem("todos", JSON.stringify(todos));
       localStorage.setItem("allTags", JSON.stringify(allTags));
       showDeleteAlert.value = true;
@@ -173,14 +173,11 @@ export default defineComponent({
     };
 
     const triggerFilteredData = (filteringTag: any) => {
-      console.log("filteringTag", filteringTag);
       filteredTodos.value = todos.value.filter((obj: any) => {
         return obj.tags.some((tag: any) => {
           return tag.includes(filteringTag);
         });
       });
-
-      console.log("filteredTodos", filteredTodos);
     };
 
     const searchTags = computed(() => {
@@ -206,7 +203,6 @@ export default defineComponent({
       todos.value = JSON.parse(localStorage.getItem("todos") as string) || [];
       allTags.value =
         JSON.parse(localStorage.getItem("allTags") as string) || [];
-      console.log(filteredTag.value);
       // validate.value.$invalid=true
     });
     watch(
