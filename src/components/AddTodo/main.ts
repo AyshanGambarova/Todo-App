@@ -143,7 +143,7 @@ export default defineComponent({
       open.value = false;
       todos.value.splice(deletedItemIndex.value , 1);
       localStorage.setItem("todos", JSON.stringify(todos));
-      localStorage.setItem("allTags", JSON.stringify(allTags));
+      createTags()
       showDeleteAlert.value = true;
       setTimeout(function () {
         showDeleteAlert.value = false;
