@@ -46,7 +46,21 @@ export default defineComponent({
     } else {
       todos.value = JSON.parse(localStorage.getItem("todos") as string);
     }
-
+    const createTags=()=>{
+      let tags = todos.value
+      .map((todo: any) => todo.tags)
+      .filter((item: any) => {
+        return Object.keys(item).length > 0;
+      });
+    let flattenedTags = tags.reduce(
+      (acc: any, curr: any) => acc.concat(curr),
+      []
+    );
+    let uniqueTags: any = Array.from(new Set(flattenedTags));
+    localStorage.setItem("allTags", JSON.stringify(uniqueTags));
+    allTags.value = JSON.parse(localStorage.getItem("allTags") as string);
+    }
+    
     //#endregion
 
     //#region Form validation
@@ -109,18 +123,7 @@ export default defineComponent({
             }, 2000);
           }
           localStorage.setItem("tasks", JSON.stringify(todos));
-          let tags = todos.value
-            .map((todo: any) => todo.tags)
-            .filter((item: any) => {
-              return Object.keys(item).length > 0;
-            });
-          let flattenedTags = tags.reduce(
-            (acc: any, curr: any) => acc.concat(curr),
-            []
-          );
-          let uniqueTags: any = Array.from(new Set(flattenedTags));
-          localStorage.setItem("allTags", JSON.stringify(uniqueTags));
-          allTags.value = JSON.parse(localStorage.getItem("allTags") as string);
+          createTags();
           creatingTodo.value = {
             subject: "",
             tags: [],
