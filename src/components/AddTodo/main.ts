@@ -28,8 +28,8 @@ export default defineComponent({
       completed: false,
     });
     const todos = ref<any>([]);
-    const allTags = ref<any>([]);
     const filteredTodos = ref<any>([]);
+    const allTags = ref<any>([]);
     const searchingTag = ref<string>("");
     const selectedTag = ref<string>("");
     const filteredTag = ref<string>("");
